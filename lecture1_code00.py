@@ -98,7 +98,7 @@ def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=Tru
     :param w0: initial weight. list. [(len(x) + 1) x 1]
     :param x_array: [n_sample x len(x)]
     :param y_array: [n_sample x 1]
-    :param gamma: learning rate, scala, 0< gamma
+    :param gamma: learning rate, scala, 0 < gamma
     :param heuristic: heuristic learning rate, bool, If True, gamma(k) = gamma/k
     :return:
     """
@@ -134,7 +134,9 @@ def main():
     X, Y = generate_training_data()
     print ("loss function = %g" % loss_function(w_2d, X, Y))
 
-    stochastic_gradient_descent(X, Y, 10, b_verbose=True)
+    w_list = stochastic_gradient_descent(X, Y, 1, heuristic=False, b_verbose=True)
+    contour_sigmoid_2d(w_list[-1], X, Y)
+
 
 if __name__ == '__main__':
     main()

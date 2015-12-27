@@ -1,6 +1,7 @@
 import unittest
 import lecture1_code00 as dl
 from sklearn.datasets.samples_generator import make_blobs
+import numpy as np
 
 
 class TestDeepLearning(unittest.TestCase):
@@ -23,3 +24,13 @@ class TestDeepLearning(unittest.TestCase):
         result3 = dl.linear_model(w3, x3)
 
         self.assertAlmostEqual(x3[0]*w3[0] + x3[1]*w3[1] + x3[2] * w3[2] + w3[3] * 1.0, result3,)
+
+    def test_stochastic_gradient_descent(self):
+        w_list = dl.stochastic_gradient_descent(self.X, self.Y, 1, heuristic=False)
+        w_mine = w_list[-1]
+
+        self.assertLess(dl.loss_function(w_mine, self.X, self.Y), 2.0)
+
+        expected = (1.45057928e+000,  -7.90299460e-001,  -6.66694597e-106)
+        for w, e in zip(w_mine, expected):
+            self.assertAlmostEqual(w, e)
