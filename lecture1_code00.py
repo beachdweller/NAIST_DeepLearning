@@ -28,6 +28,19 @@ def linear_model(w, x):
     return np.dot(w_array, x_array)
 
 
+def sigmoid_z(z):
+    return 1.0 / (1.0 + np.exp(-z))
+
+
+def sigmoid_x(w, x):
+    """
+    :param x: data to fit. [1 x (len(x))]
+    :param w: weight to fit the data. [1 x (len(x) + 1)]
+    :return:
+    """
+    return sigmoid_z(linear_model(w, x))
+
+
 def main():
     n = 4
     w = [1] * (n + 1)
