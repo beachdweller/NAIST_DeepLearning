@@ -17,9 +17,12 @@ import numpy.random as nr
 from sklearn.datasets.samples_generator import make_blobs
 import pylab
 
+
 def linear_model(w, x):
     """
     y = wT x
+    dot product of w & x
+    (implicitly include bias)
     :param x: data to fit. [1 x (len(x))]
     :param w: weight to fit the data. [1 x (len(x) + 1)]
     :return:
@@ -30,6 +33,10 @@ def linear_model(w, x):
 
 
 def sigmoid_z(z):
+    """
+    :param z: float
+    :return:
+    """
     return 1.0 / (1.0 + np.exp(-z))
 
 
@@ -43,10 +50,22 @@ def sigmoid_x(w, x):
 
 
 def d_sigmoid_dz(z):
+    """
+    derivative of sigmoid
+    :param z:
+    :return:
+    """
     return sigmoid_z(z) * (1-sigmoid_z(z))
 
 
 def d_sigmoid_dx(x, w):
+    """
+    derivative of sigmoid
+
+    :param x:
+    :param w:
+    :return:
+    """
     return d_sigmoid_dz(linear_model(x, w))
 
 
