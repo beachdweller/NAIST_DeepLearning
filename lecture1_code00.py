@@ -41,6 +41,14 @@ def sigmoid_x(w, x):
     return sigmoid_z(linear_model(w, x))
 
 
+def d_sigmoid_dz(z):
+    return sigmoid_z(z) * (1-sigmoid_z(z))
+
+
+def d_sigmoid_dx(x, w):
+    return d_sigmoid_dz(linear_model(x, w))
+
+
 def main():
     n = 4
     w = [1] * (n + 1)
