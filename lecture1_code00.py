@@ -101,6 +101,22 @@ def loss_function(w, X, Y):
     return result
 
 
+def get_sample_format(x_array):
+    """
+    generate format string for n samples
+
+    example
+    =======
+    >>> X = np.zeros((100, 100))
+    >>> get_sample_format(X)
+    %03d
+
+    :param x_array: [n x m]
+    :return:
+    """
+    return '%0'+str(int(np.log10(x_array.shape[0])+1))+'d'
+
+
 def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=True, filename_prefix=False, b_verbose=False):
     """
     try to find w minimizing the loss function through sample by sample iteration
@@ -115,7 +131,7 @@ def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=Tru
         w0 = np.ones(x_array.shape[1]+1)
 
     if filename_prefix:
-        format_string = filename_prefix+'%0'+str(int(np.log10(x_array.shape[0])+1))+'d.png'
+        filename_format_string = filename_prefix+get_sample_format(x_array)+'.png'
 
     w = w0
     counter = 1
@@ -130,7 +146,7 @@ def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=Tru
             print ("loss function = %g" % loss_function(w, x_array, y_array))
 
         if filename_prefix:
-            contour_sigmoid_2d(w, x_array, y_array, format_string % counter)
+            contour_sigmoid_2d(w, x_array, y_array, filename_format_string % counter)
             pylab.clf()
 
         counter += 1

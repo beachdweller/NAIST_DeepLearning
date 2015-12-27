@@ -34,3 +34,8 @@ class TestDeepLearning(unittest.TestCase):
         expected = (1.45057928e+000,  -7.90299460e-001,  -6.66694597e-106)
         for w, e in zip(w_mine, expected):
             self.assertAlmostEqual(w, e)
+
+
+    def test_get_sample_format(self):
+        X = np.zeros((100, 100))
+        self.assertEqual('%03d', dl.get_sample_format(X))
