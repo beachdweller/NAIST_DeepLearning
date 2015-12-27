@@ -68,15 +68,18 @@ def contour_sigmoid_2d(w, X, Y, filename=False, title=False):
     :return:
     """
     # plot the line, the points, and the nearest vectors to the plane
-    xx = np.linspace(-1, 5, 10)
-    yy = np.linspace(-1, 5, 10)
+    
+    contour_resolution = 20
+
+    xx = np.linspace(-1, 5, contour_resolution)
+    yy = np.linspace(-1, 5, contour_resolution)
 
     X1, X2 = np.meshgrid(xx, yy)
     Z = np.empty(X1.shape)
     for (i, j), x1 in np.ndenumerate(X1):
         x2 = X2[i, j]
         Z[i, j] = sigmoid_x(w, [x1, x2])
-    levels = np.arange(0.0, 1.0 + 0.05, 0.1)
+    levels = (0.1, 0.5, 0.9)
     pylab.contour(X1, X2, Z, levels)
     pylab.scatter(X[:, 0], X[:, 1], c=Y, cmap=pylab.cm.Paired)
     pylab.axis('tight')
