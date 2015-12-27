@@ -60,7 +60,7 @@ def generate_training_data(n_samples=50):
     return X, Y
 
 
-def contour_sigmoid_2d(w, X, Y):
+def contour_sigmoid_2d(w, X, Y, filename=False, title=False):
     """
     :param w: weight as training result [1 x 3]
     :param X: training data, [n x 2]
@@ -80,7 +80,16 @@ def contour_sigmoid_2d(w, X, Y):
     pylab.contour(X1, X2, Z, levels)
     pylab.scatter(X[:, 0], X[:, 1], c=Y, cmap=pylab.cm.Paired)
     pylab.axis('tight')
-    pylab.show()
+
+    if not title:
+        pylab.title('[%g, %g, %g] %g' % (w[0], w[1], w[2], loss_function(w, X, Y)))
+    else:
+        pylab.title(title)
+
+    if filename:
+        pylab.savefig(filename,dpi=300)
+    else:
+        pylab.show()
 
 
 def loss_function(w, X, Y):
@@ -92,7 +101,7 @@ def loss_function(w, X, Y):
     return result
 
 
-def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=True, b_plot=False, b_verbose=False):
+def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=True, filename_prefix=False, b_verbose=False):
     """
     try to find w minimizing the loss function through sample by sample iteration
     :param w0: initial weight. list. [(len(x) + 1) x 1]
@@ -105,6 +114,9 @@ def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=Tru
     if not w0:
         w0 = np.ones(x_array.shape[1]+1)
 
+    if filename_prefix:
+        format_string = filename_prefix+'%0'+str(int(np.log10(x_array.shape[0])+1))+'d.png'
+
     w = w0
     counter = 1
     w_list = [w]
@@ -116,6 +128,10 @@ def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=Tru
         w_list.append(w)
         if b_verbose:
             print ("loss function = %g" % loss_function(w, x_array, y_array))
+
+        if filename_prefix:
+            contour_sigmoid_2d(w, x_array, y_array, format_string % counter)
+            pylab.clf()
 
         counter += 1
         if heuristic:
@@ -134,7 +150,7 @@ def main():
     X, Y = generate_training_data()
     print ("loss function = %g" % loss_function(w_2d, X, Y))
 
-    w_list = stochastic_gradient_descent(X, Y, 1, heuristic=False, b_verbose=True)
+    w_list = stochastic_gradient_descent(X, Y, 1, heuristic=False, b_verbose=True, filename_prefix='blob')
     contour_sigmoid_2d(w_list[-1], X, Y)
 
 
