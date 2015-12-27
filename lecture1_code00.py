@@ -115,6 +115,15 @@ def contour_sigmoid_2d(w, X, Y):
 #     return w_list
 
 
+def loss_function(w, X, Y):
+    result = 0.0
+    for x, y in zip(X, Y):
+        result += (sigmoid_x(w, x) - y) ** 2
+    result *= 0.5
+
+    return result
+
+
 def main():
     n = 4
     w = [1] * (n + 1)
@@ -124,6 +133,7 @@ def main():
 
     w_2d = [1, 1, 1]
     X, Y = generate_training_data()
+    print ("loss function = %g" % loss_function(w_2d, X, Y))
     contour_sigmoid_2d(w_2d, X, Y)
 
 
