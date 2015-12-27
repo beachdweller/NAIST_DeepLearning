@@ -17,3 +17,9 @@ class TestDeepLearning(unittest.TestCase):
         result = dl.linear_model(w, x)
 
         self.assertAlmostEqual(x[0]*w[0] + x[1]*w[1] + w[2] * 1, result,)
+
+        x3 = [1.0, -1.0, 1.0]
+        w3 = [1, 2, 1, 0.5]
+        result3 = dl.linear_model(w3, x3)
+
+        self.assertAlmostEqual(x3[0]*w3[0] + x3[1]*w3[1] + x3[2] * w3[2] + w3[3] * 1.0, result3,)
