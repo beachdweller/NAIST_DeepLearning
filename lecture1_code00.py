@@ -83,38 +83,6 @@ def contour_sigmoid_2d(w, X, Y):
     pylab.show()
 
 
-# def stochastic_gradient_descent(w0, x_array, y_array, gamma, heuristic=True, b_plot=False):
-#     """
-#     try to find w minimizing the loss function through sample by sample iteration
-#     :param w0: initial weight. list. [(len(x) + 1) x 1]
-#     :param x_array: [n_sample x len(x)]
-#     :param y_array: [n_sample x 1]
-#     :param gamma: learning rate, scala, 0< gamma
-#     :param heuristic: heuristic learning rate, bool, If True, gamma(k) = gamma/k
-#     :return:
-#     """
-#     if x_array.shape[1] + 1 > len(w0):
-#         w0 += [1.0] * (x_array.shape[1] + 1 - len(w0))
-#     elif x_array.shape[1] + 1 < len(w0):
-#         w0 = w0[:x_array.shape[1] + 1]
-#
-#     w = (w0)
-#     counter = 1
-#     w_list = [w0]
-#     for x, y in zip(x_array, y_array,):
-#         b = w[-1]
-#         error = sigmoid_x(x, w[:-1], b) - y
-#         factor = ((-gamma)*error*d_sigmoid_dx(x, w[:-1], b))
-#         w[:-1] += factor * x
-#         w[-1] = factor * b
-#         w_list.append(w)
-#
-#         counter += 1
-#         if heuristic:
-#             gamma *= (1.0/counter)
-#     return w_list
-
-
 def loss_function(w, X, Y):
     result = 0.0
     for x, y in zip(X, Y):
@@ -122,6 +90,37 @@ def loss_function(w, X, Y):
     result *= 0.5
 
     return result
+
+
+def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=True, b_plot=False, b_verbose=False):
+    """
+    try to find w minimizing the loss function through sample by sample iteration
+    :param w0: initial weight. list. [(len(x) + 1) x 1]
+    :param x_array: [n_sample x len(x)]
+    :param y_array: [n_sample x 1]
+    :param gamma: learning rate, scala, 0< gamma
+    :param heuristic: heuristic learning rate, bool, If True, gamma(k) = gamma/k
+    :return:
+    """
+    if not w0:
+        w0 = np.ones(x_array.shape[1]+1)
+
+    w = w0
+    counter = 1
+    w_list = [w]
+    for x, y in zip(x_array, y_array,):
+        error = sigmoid_x(w, x) - y
+        factor = ((-gamma)*error*d_sigmoid_dx(w, x))
+        w[:-1] += factor * x
+        w[-1] *= factor
+        w_list.append(w)
+        if b_verbose:
+            print ("loss function = %g" % loss_function(w, x_array, y_array))
+
+        counter += 1
+        if heuristic:
+            gamma *= (1.0/counter)
+    return w_list
 
 
 def main():
@@ -134,8 +133,8 @@ def main():
     w_2d = [1, 1, 1]
     X, Y = generate_training_data()
     print ("loss function = %g" % loss_function(w_2d, X, Y))
-    contour_sigmoid_2d(w_2d, X, Y)
 
+    stochastic_gradient_descent(X, Y, 10, b_verbose=True)
 
 if __name__ == '__main__':
     main()
