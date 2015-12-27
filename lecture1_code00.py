@@ -16,18 +16,23 @@ import numpy as np
 import numpy.random as nr
 
 
-def linear_model_bias(x, w, b):
+def linear_model(w, x):
+    """
+    y = wT x
+    :param x: data to fit. [1 x (len(x))]
+    :param w: weight to fit the data. [1 x (len(x) + 1)]
+    :return:
+    """
     w_array = np.array(w)
-    x_array = np.array(x)
-    return np.dot(w_array, x_array) + b
+    x_array = np.concatenate((x, [1.0]))
+    return np.dot(w_array, x_array)
 
 
 def main():
     n = 4
-    w = [1] * n
+    w = [1] * (n + 1)
     x = 2 * nr.random(n) - 1
-    b = 0
-    result = linear_model_bias(x, w, b)
+    result = linear_model(w, x)
     print(result)
 
 
