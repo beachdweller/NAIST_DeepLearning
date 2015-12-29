@@ -79,7 +79,7 @@ def generate_training_data(n_samples=50):
     return X, Y
 
 
-def contour_sigmoid_2d(w, X, Y, filename=False, title=False):
+def contour_sigmoid_2d(w, X, Y, filename=None, title=None):
     """
     :param w: weight as training result [1 x 3]
     :param X: training data, [n x 2]
@@ -139,7 +139,7 @@ def get_sample_format(x_array):
     return '%0'+str(int(np.log10(x_array.shape[0])+1))+'d'
 
 
-def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=True, filename_prefix=False, b_verbose=False):
+def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=True, filename_prefix=None, b_verbose=False):
     """
     try to find w minimizing the loss function through sample by sample iteration
     :param w0: initial weight. list. [(len(x) + 1) x 1]
@@ -152,8 +152,9 @@ def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=Tru
     if not w0:
         w0 = np.ones(x_array.shape[1]+1)
 
+    filename_format_string = None
     if filename_prefix:
-        filename_format_string = filename_prefix+get_sample_format(x_array)+'.png'
+        filename_format_string = '%s%s.png' % (filename_prefix, get_sample_format(x_array))
 
     w = w0
     counter = 1
