@@ -139,7 +139,35 @@ def get_sample_format(x_array):
     return '%0'+str(int(np.log10(x_array.shape[0])+1))+'d'
 
 
-def gradient_descent_step(x_array, y_array, gamma, w0=False, heuristic=True, b_verbose=False):
+def gradient_descent_n(x_array, y_array, gamma, n_iteration, w0=[], filename_prefix=None, b_verbose=False):
+    """
+    iterated gradient descent step n times
+    :param x_array: training data
+    :param y_array: training label
+    :param gamma: learning factor
+    :param n_iteration:
+    :param w0: optional. initial weight
+    :param filename_prefix: optional. if given, generate iteration snapshot
+    :param b_verbose: optional. if True, print loss function at each time step
+    :return:list of weight after each iteration
+    """
+    w0 = init_w(w0, x_array)
+    filename_format_string = init_filename_format_string(filename_prefix, x_array)
+
+    w = w0
+    w_list = [w]
+    for k in range(n_iteration):
+        w_list.append(gradient_descent_step(x_array, y_array, gamma, w0=w_list[-1]))
+        if b_verbose:
+            print ("loss function = %g" % loss_function(w_list[-1], x_array, y_array))
+        if filename_prefix:
+            contour_sigmoid_2d(w, x_array, y_array, filename_format_string % (k+1))
+            pylab.clf()
+
+    return w_list
+
+
+def gradient_descent_step(x_array, y_array, gamma, w0=[]):
     """
     one step of gradient descent algorithm using the given data set
 
@@ -147,12 +175,9 @@ def gradient_descent_step(x_array, y_array, gamma, w0=False, heuristic=True, b_v
     :param y_array: [n_sample x 1]
     :param gamma: learning rate, scala, 0 < gamma
     :param w0: optional. initial weight. list. [(len(x) + 1) x 1]
-    :param heuristic: optional. bool. heuristic learning rate, If True, gamma(k) = gamma/k
-    :param b_verbose: print result
     :return:
     """
-    if not w0:
-        w0 = np.ones(x_array.shape[1]+1)
+    w0 = init_w(w0, x_array)
 
     w = np.matrix(w0).T
     x_matrix = np.matrix(np.concatenate((x_array, np.ones((x_array.shape[0], 1))), 1))
@@ -165,12 +190,18 @@ def gradient_descent_step(x_array, y_array, gamma, w0=False, heuristic=True, b_v
     coefficient_array = error_array * d_sigmoid_array
     coefficient_matrix = np.matrix(coefficient_array)
 
-    w += ((-gamma)*coefficient_matrix.T * x_matrix).T
+    w += (gamma*coefficient_matrix.T * x_matrix).T
 
     return w.T.tolist()[0]
 
 
-def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=True, filename_prefix=None, b_verbose=False):
+def init_w(w0, x_array):
+    if 0 == len(w0):
+        w0 = np.ones(x_array.shape[1] + 1)
+    return w0
+
+
+def stochastic_gradient_descent(x_array, y_array, gamma, w0=[], heuristic=True, filename_prefix=None, b_verbose=False):
     """
     try to find w minimizing the loss function through sample by sample iteration
     :param w0: initial weight. list. [(len(x) + 1) x 1]
@@ -180,12 +211,9 @@ def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=Tru
     :param heuristic: heuristic learning rate, bool, If True, gamma(k) = gamma/k
     :return:
     """
-    if not w0:
-        w0 = np.ones(x_array.shape[1]+1)
+    w0 = init_w(w0, x_array)
 
-    filename_format_string = None
-    if filename_prefix:
-        filename_format_string = '%s%s.png' % (filename_prefix, get_sample_format(x_array))
+    filename_format_string = init_filename_format_string(filename_prefix, x_array)
 
     w = w0
     counter = 1
@@ -209,6 +237,13 @@ def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=Tru
     return w_list
 
 
+def init_filename_format_string(filename_prefix, x_array):
+    filename_format_string = None
+    if filename_prefix:
+        filename_format_string = '%s%s.png' % (filename_prefix, get_sample_format(x_array))
+    return filename_format_string
+
+
 def main():
     n = 4
     w = [1] * (n + 1)
@@ -225,7 +260,11 @@ def main():
 
     w_gd = gradient_descent_step(X, Y, 1)
     print w_gd
-    print ("loss function = %g" % loss_function(w_gd, X, Y))
+    print ("loss function after gradient_descent_step = %g" % loss_function(w_gd, X, Y))
+
+    w_list = gradient_descent_n(X, Y, 1, 100)
+    print w_list[-1]
+    print ("loss function after gradient_descent_n = %g" % loss_function(w_list[-1], X, Y))
 
 
 if __name__ == '__main__':
