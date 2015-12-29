@@ -139,7 +139,7 @@ def get_sample_format(x_array):
     return '%0'+str(int(np.log10(x_array.shape[0])+1))+'d'
 
 
-def gradient_descent_n(x_array, y_array, gamma, n_iteration, w0=[], filename_prefix=None, b_verbose=False):
+def gradient_descent_n(x_array, y_array, gamma, n_iteration, w0=[], filename_prefix='', b_verbose=False):
     """
     iterated gradient descent step n times
     :param x_array: training data
@@ -201,7 +201,7 @@ def init_w(w0, x_array):
     return w0
 
 
-def stochastic_gradient_descent(x_array, y_array, gamma, w0=[], heuristic=True, filename_prefix=None, b_verbose=False):
+def stochastic_gradient_descent(x_array, y_array, gamma, w0=[], heuristic=True, filename_prefix='', b_verbose=False):
     """
     try to find w minimizing the loss function through sample by sample iteration
     :param w0: initial weight. list. [(len(x) + 1) x 1]
@@ -262,7 +262,7 @@ def main():
     print w_gd
     print ("loss function after gradient_descent_step = %g" % loss_function(w_gd, X, Y))
 
-    w_list = gradient_descent_n(X, Y, 1, 100)
+    w_list = gradient_descent_n(X, Y, 1, 20)
     print w_list[-1]
     print ("loss function after gradient_descent_n = %g" % loss_function(w_list[-1], X, Y))
 
