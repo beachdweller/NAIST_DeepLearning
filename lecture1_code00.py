@@ -139,6 +139,37 @@ def get_sample_format(x_array):
     return '%0'+str(int(np.log10(x_array.shape[0])+1))+'d'
 
 
+def gradient_descent_step(x_array, y_array, gamma, w0=False, heuristic=True, b_verbose=False):
+    """
+    one step of gradient descent algorithm using the given data set
+
+    :param x_array: [n_sample x len(x)]
+    :param y_array: [n_sample x 1]
+    :param gamma: learning rate, scala, 0 < gamma
+    :param w0: optional. initial weight. list. [(len(x) + 1) x 1]
+    :param heuristic: optional. bool. heuristic learning rate, If True, gamma(k) = gamma/k
+    :param b_verbose: print result
+    :return:
+    """
+    if not w0:
+        w0 = np.ones(x_array.shape[1]+1)
+
+    w = np.matrix(w0).T
+    x_matrix = np.matrix(np.concatenate((x_array, np.ones((x_array.shape[0], 1))), 1))
+    y_matrix = np.matrix(y_array).T
+
+    prediction = sigmoid_z(x_matrix * w)
+    error_array = np.array(y_matrix - prediction)
+
+    d_sigmoid_array = np.array(d_sigmoid_dz(np.array(x_matrix * w)))
+    coefficient_array = error_array * d_sigmoid_array
+    coefficient_matrix = np.matrix(coefficient_array)
+
+    w += ((-gamma)*coefficient_matrix.T * x_matrix).T
+
+    return w.T.tolist()[0]
+
+
 def stochastic_gradient_descent(x_array, y_array, gamma, w0=False, heuristic=True, filename_prefix=None, b_verbose=False):
     """
     try to find w minimizing the loss function through sample by sample iteration
@@ -189,8 +220,12 @@ def main():
     X, Y = generate_training_data()
     print ("loss function = %g" % loss_function(w_2d, X, Y))
 
-    w_list = stochastic_gradient_descent(X, Y, 1, heuristic=False, b_verbose=True, filename_prefix='blob')
-    contour_sigmoid_2d(w_list[-1], X, Y)
+    # w_list = stochastic_gradient_descent(X, Y, 1, heuristic=False, b_verbose=True, filename_prefix='blob')
+    # contour_sigmoid_2d(w_list[-1], X, Y)
+
+    w_gd = gradient_descent_step(X, Y, 1)
+    print w_gd
+    print ("loss function = %g" % loss_function(w_gd, X, Y))
 
 
 if __name__ == '__main__':
