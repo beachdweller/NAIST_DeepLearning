@@ -180,7 +180,7 @@ def gradient_descent_step(x_array, y_array, gamma, w0=[]):
     w0 = init_w(w0, x_array)
 
     w = np.matrix(w0).T
-    x_matrix = np.matrix(np.concatenate((x_array, np.ones((x_array.shape[0], 1))), 1))
+    x_matrix = append_one_matrix(x_array)
     y_matrix = np.matrix(y_array).T
 
     prediction = sigmoid_z(x_matrix * w)
@@ -193,6 +193,11 @@ def gradient_descent_step(x_array, y_array, gamma, w0=[]):
     w += (gamma*coefficient_matrix.T * x_matrix).T
 
     return w.T.tolist()[0]
+
+
+def append_one_matrix(x_array):
+    x_matrix = np.matrix(np.concatenate((x_array, np.ones((x_array.shape[0], 1))), 1))
+    return x_matrix
 
 
 def init_w(w0, x_array):
