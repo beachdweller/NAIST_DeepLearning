@@ -161,7 +161,7 @@ def gradient_descent_n(x_array, y_array, gamma, n_iteration, w0=[], filename_pre
         if b_verbose:
             print ("loss function = %g" % loss_function(w_list[-1], x_array, y_array))
         if filename_prefix:
-            contour_sigmoid_2d(w, x_array, y_array, filename_format_string % (k+1))
+            contour_sigmoid_2d(w_list[-1], x_array, y_array, filename_format_string % (k+1))
             pylab.clf()
 
     return w_list
@@ -249,11 +249,11 @@ def main():
     w = [1] * (n + 1)
     x = 2 * nr.random(n) - 1
     result = linear_model(w, x)
-    print(result)
+    print("result = %g" % result)
 
     w_2d = [1, 1, 1]
     X, Y = generate_training_data()
-    print ("loss function = %g" % loss_function(w_2d, X, Y))
+    print ("loss function w=%s = %g" % (w_2d, loss_function(w_2d, X, Y)))
 
     # w_list = stochastic_gradient_descent(X, Y, 1, heuristic=False, b_verbose=True, filename_prefix='blob')
     # contour_sigmoid_2d(w_list[-1], X, Y)
@@ -262,7 +262,7 @@ def main():
     print w_gd
     print ("loss function after gradient_descent_step = %g" % loss_function(w_gd, X, Y))
 
-    w_list = gradient_descent_n(X, Y, 1, 20)
+    w_list = gradient_descent_n(X, Y, 1, 20, filename_prefix='gdn')
     print w_list[-1]
     print ("loss function after gradient_descent_n = %g" % loss_function(w_list[-1], X, Y))
 
