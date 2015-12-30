@@ -249,6 +249,22 @@ def init_filename_format_string(filename_prefix, x_array):
     return filename_format_string
 
 
+def two_layer_neural_net(w1, w2, x_array):
+
+    # [x, 1] -> numpy matrix [n x m]
+    x_matrix = append_one_matrix(x_array)
+
+    # w1: expected to be [m x p], p == len(w2)
+    w1_matrix = np.matrix(w1)
+    w1x = x_matrix * w1
+
+    # w2: expected to be [1 x p]
+    w2_matrix = np.matrix([w2]).T
+    w2w1x = w1x * w2_matrix
+
+    return w2w1x
+
+
 def main():
     n = 4
     w = [1] * (n + 1)

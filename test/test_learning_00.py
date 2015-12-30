@@ -51,6 +51,13 @@ class TestLearning(unittest.TestCase):
         self.assertEqual('abc%02d.png', dl.init_filename_format_string('abc', self.X))
         self.assertIsNone(dl.init_filename_format_string(None, self.X))
 
+    def test_two_layer_neural_net(self):
+        w1 = np.array(np.ones((3, 4)))
+        w2 = [1.0, 1.0, 1.0, 1.0, ]
+        result = dl.two_layer_neural_net(w1, w2, self.X)
+        expected = 0.0
+        self.assertEqual((self.X.shape[0], 1), result.shape)
+
 
 class TestLearningComponents(unittest.TestCase):
     def test_get_sample_format(self):
