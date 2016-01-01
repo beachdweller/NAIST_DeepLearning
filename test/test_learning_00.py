@@ -58,12 +58,11 @@ class TestLearning(unittest.TestCase):
         expected = 0.0
         self.assertEqual((self.X.shape[0], 1), result.shape)
 
+    def test_get_sample_format(self):
+        self.assertEqual('%02d', dl.get_sample_format(self.X))
+
 
 class TestLearningComponents(unittest.TestCase):
-    def test_get_sample_format(self):
-        X = np.zeros((100, 100))
-        self.assertEqual('%03d', dl.get_sample_format(X))
-
     def test_linear_model(self):
         w1 = [1.0, 1.0]
         x1 = [2.0]

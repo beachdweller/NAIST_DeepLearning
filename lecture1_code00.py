@@ -55,7 +55,7 @@ def d_sigmoid_dz(z):
     :param z:
     :return:
     """
-    return sigmoid_z(z) * (1-sigmoid_z(z))
+    return sigmoid_z(z) * (1 - sigmoid_z(z))
 
 
 def d_sigmoid_dx(x, w):
@@ -75,19 +75,19 @@ def generate_training_data(n_samples=50):
     :param n_samples:
     :return:
     """
-    X, Y = make_blobs(n_samples=n_samples, centers=2, random_state=0, cluster_std=0.60)
-    return X, Y
+    x_array, y_array = make_blobs(n_samples=n_samples, centers=2, random_state=0, cluster_std=0.60)
+    return x_array, y_array
 
 
-def contour_sigmoid_2d(w, X, Y, filename=None, title=None):
+def contour_sigmoid_2d(w, x_array, y_array, filename=None, title=None):
     """
     :param w: weight as training result [1 x 3]
-    :param X: training data, [n x 2]
-    :param Y: training label, [n x 1]
+    :param x_array: training data, [n x 2]
+    :param y_array: training label, [n x 1]
     :return:
     """
     # plot the line, the points, and the nearest vectors to the plane
-    
+
     contour_resolution = 20
 
     xx = np.linspace(-1, 5, contour_resolution)
@@ -100,16 +100,16 @@ def contour_sigmoid_2d(w, X, Y, filename=None, title=None):
         Z[i, j] = sigmoid_x(w, [x1, x2])
     levels = (0.1, 0.5, 0.9)
     pylab.contour(X1, X2, Z, levels)
-    pylab.scatter(X[:, 0], X[:, 1], c=Y, cmap=pylab.cm.Paired)
+    pylab.scatter(x_array[:, 0], x_array[:, 1], c=y_array, cmap=pylab.cm.Paired)
     pylab.axis('tight')
 
     if not title:
-        pylab.title('[%g, %g, %g] %g' % (w[0], w[1], w[2], loss_function(w, X, Y)))
+        pylab.title('[%g, %g, %g] %g' % (w[0], w[1], w[2], loss_function(w, x_array, y_array)))
     else:
         pylab.title(title)
 
     if filename:
-        pylab.savefig(filename,dpi=300)
+        pylab.savefig(filename, dpi=300)
     else:
         pylab.show()
 
@@ -136,7 +136,7 @@ def get_sample_format(x_array):
     :param x_array: [n x m]
     :return:
     """
-    return '%0'+str(int(np.log10(x_array.shape[0])+1))+'d'
+    return '%0' + str(int(np.log10(x_array.shape[0]) + 1)) + 'd'
 
 
 def gradient_descent_n(x_array, y_array, gamma, n_iteration, w0=[], filename_prefix='', b_verbose=False):
@@ -159,9 +159,9 @@ def gradient_descent_n(x_array, y_array, gamma, n_iteration, w0=[], filename_pre
     for k in range(n_iteration):
         w_list.append(gradient_descent_step(x_array, y_array, gamma, w0=w_list[-1]))
         if b_verbose:
-            print ("loss function = %g" % loss_function(w_list[-1], x_array, y_array))
+            print("loss function = %g" % loss_function(w_list[-1], x_array, y_array))
         if filename_prefix:
-            contour_sigmoid_2d(w_list[-1], x_array, y_array, filename_format_string % (k+1))
+            contour_sigmoid_2d(w_list[-1], x_array, y_array, filename_format_string % (k + 1))
             pylab.clf()
 
     return w_list
@@ -190,7 +190,7 @@ def gradient_descent_step(x_array, y_array, gamma, w0=[]):
     coefficient_array = error_array * d_sigmoid_array
     coefficient_matrix = np.matrix(coefficient_array)
 
-    w += (gamma*coefficient_matrix.T * x_matrix).T
+    w += (gamma * coefficient_matrix.T * x_matrix).T
 
     return w.T.tolist()[0]
 
@@ -223,14 +223,14 @@ def stochastic_gradient_descent(x_array, y_array, gamma, w0=[], heuristic=True, 
     w = w0
     counter = 1
     w_list = [w]
-    for x, y in zip(x_array, y_array,):
+    for x, y in zip(x_array, y_array, ):
         error = sigmoid_x(w, x) - y
-        factor = ((-gamma)*error*d_sigmoid_dx(w, x))
+        factor = ((-gamma) * error * d_sigmoid_dx(w, x))
         w[:-1] += factor * x
         w[-1] *= factor
         w_list.append(w)
         if b_verbose:
-            print ("loss function = %g" % loss_function(w, x_array, y_array))
+            print("loss function = %g" % loss_function(w, x_array, y_array))
 
         if filename_prefix:
             contour_sigmoid_2d(w, x_array, y_array, filename_format_string % counter)
@@ -238,7 +238,7 @@ def stochastic_gradient_descent(x_array, y_array, gamma, w0=[], heuristic=True, 
 
         counter += 1
         if heuristic:
-            gamma *= (1.0/counter)
+            gamma *= (1.0 / counter)
     return w_list
 
 
@@ -250,7 +250,6 @@ def init_filename_format_string(filename_prefix, x_array):
 
 
 def two_layer_neural_net(w1, w2, x_array):
-
     # [x, 1] -> numpy matrix [n x m]
     x_matrix = append_one_matrix(x_array)
 
@@ -274,18 +273,18 @@ def main():
 
     w_2d = [1, 1, 1]
     X, Y = generate_training_data()
-    print ("loss function w=%s = %g" % (w_2d, loss_function(w_2d, X, Y)))
+    print("loss function w=%s = %g" % (w_2d, loss_function(w_2d, X, Y)))
 
     # w_list = stochastic_gradient_descent(X, Y, 1, heuristic=False, b_verbose=True, filename_prefix='blob')
     # contour_sigmoid_2d(w_list[-1], X, Y)
 
     w_gd = gradient_descent_step(X, Y, 1)
-    print w_gd
-    print ("loss function after gradient_descent_step = %g" % loss_function(w_gd, X, Y))
+    print('gradient_descent_step w = %s' % w_gd)
+    print("loss function after gradient_descent_step = %g" % loss_function(w_gd, X, Y))
 
     w_list = gradient_descent_n(X, Y, 1, 20, filename_prefix='gdn')
-    print w_list[-1]
-    print ("loss function after gradient_descent_n = %g" % loss_function(w_list[-1], X, Y))
+    print('gradient descent w = %s' % w_list[-1])
+    print("loss function after gradient_descent_n = %g" % loss_function(w_list[-1], X, Y))
 
 
 if __name__ == '__main__':
