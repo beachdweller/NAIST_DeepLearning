@@ -29,7 +29,7 @@ def ReLU(x_array):
 
 
 def main(min_x=-8, max_x=8):
-    x_array = np.linspace(min_x, max_x)
+    x_array = np.linspace(min_x, max_x, 101)
 
     process_them = [
         {'label': 'sigmoid', 'f': get_sigmoid_function_sympy()},
@@ -45,6 +45,7 @@ def main(min_x=-8, max_x=8):
 
         plt.grid(True)
         plt.legend(loc=0)
+        plt.axis('equal')
         plt.savefig('sigmoid.%s' % fmt)
 
 
