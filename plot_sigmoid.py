@@ -34,6 +34,7 @@ def main(min_x=-8, max_x=8):
     process_them = [
         {'label': 'sigmoid', 'f': get_sigmoid_function_sympy()},
         {'label': 'integrated sigmoid', 'f': get_integrated_sigmoid_sympy()},
+        {'label': 'softplus', 'f': sp.log(1 + sp.exp(x))},
     ]
 
     for fmt in ('pdf', 'png'):
