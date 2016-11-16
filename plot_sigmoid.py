@@ -28,6 +28,8 @@ def main(min_x=-8, max_x=8):
     process_them = [
         {'label': 'sigmoid', 'f': get_sigmoid_function_sympy()},
         {'label': 'integrated sigmoid', 'f': get_integrated_sigmoid_sympy()},
+        {'label': 'tanh', 'f': sp.tanh(x)},
+        {'label': 'integrated tanh', 'f': sp.integrate(sp.tanh(x), x)},
     ]
 
     for d in process_them:
