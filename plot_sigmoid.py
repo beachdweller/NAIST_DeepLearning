@@ -36,15 +36,16 @@ def main(min_x=-8, max_x=8):
         {'label': 'integrated sigmoid', 'f': get_integrated_sigmoid_sympy()},
     ]
 
-    for d in process_them:
-        proc_sympy_function(x_array, d['f'], d['label'])
+    for fmt in ('pdf', 'png'):
+        for d in process_them:
+            proc_sympy_function(x_array, d['f'], d['label'])
 
-    y_ReLU = ReLU(x_array)
-    plt.plot(x_array, y_ReLU, label='ReLU')
+        y_ReLU = ReLU(x_array)
+        plt.plot(x_array, y_ReLU, label='ReLU')
 
-    plt.grid(True)
-    plt.legend(loc=0)
-    plt.savefig('sigmoid.png', dpi=300)
+        plt.grid(True)
+        plt.legend(loc=0)
+        plt.savefig('sigmoid.%s' % fmt)
 
 
 if __name__ == '__main__':
