@@ -22,18 +22,25 @@ def proc_sympy_function(x_array, expression, label, lib='numpy'):
     plt.plot(x_array, y_f, label=label)
 
 
+def ReLU(x_array):
+    result = np.zeros_like(x_array)
+    result[0 < x_array] = x_array[0 < x_array]
+    return result
+
+
 def main(min_x=-8, max_x=8):
     x_array = np.linspace(min_x, max_x)
 
     process_them = [
         {'label': 'sigmoid', 'f': get_sigmoid_function_sympy()},
         {'label': 'integrated sigmoid', 'f': get_integrated_sigmoid_sympy()},
-        {'label': 'tanh', 'f': sp.tanh(x)},
-        {'label': 'integrated tanh', 'f': sp.integrate(sp.tanh(x), x)},
     ]
 
     for d in process_them:
         proc_sympy_function(x_array, d['f'], d['label'])
+
+    y_ReLU = ReLU(x_array)
+    plt.plot(x_array, y_ReLU, label='ReLU')
 
     plt.grid(True)
     plt.legend(loc=0)
