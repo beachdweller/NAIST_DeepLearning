@@ -4,6 +4,10 @@ import sympy as sp
 from sympy.abc import x
 
 
+def get_integrated_tanh_sympy():
+    return sp.integrate(sp.tanh(x), x)
+
+
 def get_integrated_sigmoid_sympy():
     sigmoid = get_sigmoid_function_sympy()
     return sp.integrate(sigmoid, x)
@@ -35,6 +39,8 @@ def main(min_x=-8, max_x=8):
         {'label': 'sigmoid', 'f': get_sigmoid_function_sympy()},
         {'label': 'integrated sigmoid', 'f': get_integrated_sigmoid_sympy()},
         {'label': 'softplus', 'f': sp.log(1 + sp.exp(x))},
+        {'label': 'tanh', 'f': sp.tanh(x)},
+        {'label': 'integrated tanh', 'f': get_integrated_tanh_sympy()},
     ]
 
     for fmt in ('pdf', 'png'):
