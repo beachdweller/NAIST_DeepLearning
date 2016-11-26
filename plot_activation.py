@@ -53,7 +53,7 @@ def main(min_x=-8, max_x=8):
         plt.grid(True)
         plt.legend(loc=0)
         plt.axis('equal')
-        plt.savefig('sigmoid.%s' % fmt)
+        plt.savefig('activation.%s' % fmt)
 
 
 if __name__ == '__main__':
