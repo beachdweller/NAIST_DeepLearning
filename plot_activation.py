@@ -60,6 +60,8 @@ def main(min_x=-8, max_x=8):
     ]
 
     for fmt in ('pdf', 'png'):
+        plt.clf()
+
         for d in process_them:
             proc_sympy_function(x_array, d['f'], d['label'])
 
