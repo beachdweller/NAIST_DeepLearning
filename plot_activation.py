@@ -51,6 +51,8 @@ def main(min_x=-8, max_x=8):
     min_x, max_x = sorted([min_x, max_x])
     x_array = np.linspace(min_x, max_x, 101)
 
+    x_array_step = get_x_step_array(min_x, max_x)
+
     symbols_to_be_processed_list = [
         {'label': 'sigmoid', 'f': get_sigmoid_function_sympy()},
         {'label': 'integrated sigmoid', 'f': get_integrated_sigmoid_sympy()},
@@ -69,6 +71,23 @@ def main(min_x=-8, max_x=8):
         plt.legend(loc=0)
         plt.axis('equal')
         plt.savefig('activation.%s' % fmt)
+
+
+def get_x_step_array(min_x, max_x):
+    if 0 > min_x * max_x:
+        # if min_x and max_x have different signs
+        x_array_step = np.array([min_x, 0.0, 1e-10, max_x])
+    elif 0 < min_x * max_x:
+        # if min_x and max_x have same signs
+        x_array_step = np.array([min_x, max_x])
+    elif 0 == min_x:
+        x_array_step = np.array([min_x, 1e-10, max_x])
+    elif 0 == max_x:
+        x_array_step = np.array([min_x, 0, 1e-10])
+    else:
+        raise ValueError('Unable to decide x array')
+
+    return x_array_step
 
 
 if __name__ == '__main__':
