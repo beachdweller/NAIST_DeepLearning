@@ -67,6 +67,9 @@ def main(min_x=-8, max_x=8):
         y_ReLU = ReLU(x_array)
         plt.plot(x_array, y_ReLU, label='ReLU')
 
+        y_step = step(x_array_step)
+        plt.plot(x_array_step, y_step, label='step')
+
         plt.grid(True)
         plt.legend(loc=0)
         plt.axis('equal')
