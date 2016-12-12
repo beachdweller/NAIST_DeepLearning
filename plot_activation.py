@@ -51,18 +51,15 @@ def main(min_x=-8, max_x=8):
     min_x, max_x = sorted([min_x, max_x])
     x_array = np.linspace(min_x, max_x, 101)
 
-    process_them = [
+    symbols_to_be_processed_list = [
         {'label': 'sigmoid', 'f': get_sigmoid_function_sympy()},
         {'label': 'integrated sigmoid', 'f': get_integrated_sigmoid_sympy()},
-        {'label': 'softplus', 'f': sp.log(1 + sp.exp(x))},
-        {'label': 'tanh', 'f': sp.tanh(x)},
-        {'label': 'integrated tanh', 'f': get_integrated_tanh_sympy()},
     ]
 
     for fmt in ('pdf', 'png'):
         plt.clf()
 
-        for d in process_them:
+        for d in symbols_to_be_processed_list:
             proc_sympy_function(x_array, d['f'], d['label'])
 
         y_ReLU = ReLU(x_array)
