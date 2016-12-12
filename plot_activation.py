@@ -26,6 +26,21 @@ def proc_sympy_function(x_array, expression, label, lib='numpy'):
     plt.plot(x_array, y_f, label=label)
 
 
+def step(z):
+    """
+    return an array of same size as z.
+    For elements of z larger than zero, return one.
+    Otherwise zero.
+
+    :type z: Any
+    :param z: input. preferrably a ndarray
+    :return:
+    """
+    result = np.zeros_like(z)
+    result[z > 0] = 1.0
+    return result
+
+
 def ReLU(x_array):
     result = np.zeros_like(x_array)
     result[0 < x_array] = x_array[0 < x_array]
