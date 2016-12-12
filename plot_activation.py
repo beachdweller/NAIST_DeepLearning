@@ -48,6 +48,7 @@ def ReLU(x_array):
 
 
 def main(min_x=-8, max_x=8):
+    min_x, max_x = sorted([min_x, max_x])
     x_array = np.linspace(min_x, max_x, 101)
 
     process_them = [
